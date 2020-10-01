@@ -7,16 +7,15 @@ int main(){
     int qtdJogos;
     int tamanhoTabuleiro;
     int numJogadas;
-    int posicao[2] = {0, 0};
     int qtdBombas;
 
-    scanf("%d", &qtdJogos);
+    scanf(" %d", &qtdJogos);
 
     while(qtdJogos != 0){
 
         qtdBombas = 0;
 
-        scanf("%d", &tamanhoTabuleiro);
+        scanf(" %d", &tamanhoTabuleiro);
         char tabuleiro[tamanhoTabuleiro][tamanhoTabuleiro];
         char tabuleiroDeChecagem[tamanhoTabuleiro][tamanhoTabuleiro];
 
@@ -34,43 +33,48 @@ int main(){
 
         //---------------------------------
 
-        scanf("%d", &numJogadas);
+        scanf(" %d", &numJogadas);
 
         //---------------------------------
+
+        int resultadoFinal = 1;
 
         while(numJogadas != 0){
 
             int posicaoEscolhida[2];
             int contagemDeRevelados = 0;
 
-            scanf("%d%d", &posicaoEscolhida[0], &posicaoEscolhida[1]);
+            scanf(" %d %d", &posicaoEscolhida[0], &posicaoEscolhida[1]);
 
             if(tabuleiro[posicaoEscolhida[0]][posicaoEscolhida[1]] == 'b'){
-                printf("PERDEU\n");
-                break;
+                resultadoFinal = 0;
             } else {
-
                 tabuleiroDeChecagem[posicaoEscolhida[0]][posicaoEscolhida[1]] = 'x';
-                
-                for(int i = -1; i < 2; i++){
-                    for(int j = -1; j < 2; j++){
-                        if(posicaoEscolhida[0] + i >= 0 && posicaoEscolhida[0] + i < tamanhoTabuleiro && posicaoEscolhida[1] + j >= 0 && posicaoEscolhida[1] + j < tamanhoTabuleiro){
-                            if(tabuleiroDeChecagem[posicaoEscolhida[0] + i][posicaoEscolhida[1] + j] != 'b'){
-                                tabuleiroDeChecagem[posicaoEscolhida[0] + i][posicaoEscolhida[1] + j] = 'x';
-                            }
-                        }
-                    }
-                } 
             }
 
-            /*for(int i = 0; i < tamanhoTabuleiro; i++){
-                for(int j = 0; j < tamanhoTabuleiro; j++){
-                    printf(" %c", tabuleiroDeChecagem[i][j]);
-                }
-                printf("\n");
-            }*/
+            int podeRevelar = 1;
 
-            if(numJogadas == 1){
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    if(posicaoEscolhida[0] + i >= 0 && posicaoEscolhida[0] + i < tamanhoTabuleiro && posicaoEscolhida[1] + j >= 0 && posicaoEscolhida[1] + j < tamanhoTabuleiro){
+                        if(tabuleiroDeChecagem[posicaoEscolhida[0] + i][posicaoEscolhida[1] + j] == 'b'){
+                            podeRevelar = 0;
+                        }
+                    }
+                }
+            }
+                
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    if(posicaoEscolhida[0] + i >= 0 && posicaoEscolhida[0] + i < tamanhoTabuleiro && posicaoEscolhida[1] + j >= 0 && posicaoEscolhida[1] + j < tamanhoTabuleiro && podeRevelar == 1){
+                        tabuleiroDeChecagem[posicaoEscolhida[0] + i][posicaoEscolhida[1] + j] = 'x';
+                    }
+                }
+            } 
+
+            numJogadas--;
+
+            if(numJogadas == 0){
                 for(int i = 0; i < tamanhoTabuleiro; i++){
                     for(int j = 0; j < tamanhoTabuleiro; j++){
                         if(tabuleiroDeChecagem[i][j] == 'x'){
@@ -80,16 +84,12 @@ int main(){
                 }
             }
 
-            if(contagemDeRevelados == (tamanhoTabuleiro*tamanhoTabuleiro) - qtdBombas){
+            if(contagemDeRevelados == (tamanhoTabuleiro*tamanhoTabuleiro) - qtdBombas && resultadoFinal == 1 && numJogadas == 0){
                 printf("GANHOU\n");
-                break;
-            }
-
-            numJogadas--;
-
-            if(contagemDeRevelados < (tamanhoTabuleiro*tamanhoTabuleiro) - qtdBombas && numJogadas == 0){
+            } else if(contagemDeRevelados < (tamanhoTabuleiro*tamanhoTabuleiro) - qtdBombas && resultadoFinal == 1 && numJogadas == 0){
                 printf("FALTOU TERMINAR\n");
-                break;
+            } else if(resultadoFinal == 0 && numJogadas == 0){
+                printf("PERDEU\n");
             }
         }
         qtdJogos--;
