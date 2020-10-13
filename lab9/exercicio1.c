@@ -33,10 +33,17 @@ int main(){
 
     scanf(" %d %d %d", &dataDePesquisa.dia, &dataDePesquisa.mes, &dataDePesquisa.ano);
 
+    int achou = 0;
+
     for(int i = 0; i < n; i++){
         if(evento[i].data.dia == dataDePesquisa.dia && evento[i].data.mes == dataDePesquisa.mes && evento[i].data.ano == dataDePesquisa.ano){
+            achou = 1;
             printf("%s %s\n", evento[i].nome, evento[i].local);
         }
+    }
+
+    if(achou == 0){
+        printf("Nenhum evento encontrado!");
     }
 
     return 0;
